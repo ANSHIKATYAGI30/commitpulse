@@ -67,7 +67,9 @@ describe('getSecondsUntilUTCMidnight', () => {
   it('always returns an integer with sub-second precision input', () => {
     vi.setSystemTime(new Date('2024-06-15T23:59:59.999Z'));
 
-    expect(Number.isInteger(getSecondsUntilUTCMidnight())).toBe(true);
+    const result = getSecondsUntilUTCMidnight();
+    expect(Number.isInteger(result)).toBe(true);
+    expect(result).toBe(0);
   });
 
 });
@@ -153,10 +155,12 @@ describe('getSecondsUntilMidnightInTimezone', () => {
   });
 
   it('always returns an integer with sub-second precision input', () => {
-  // 2024-06-16T03:59:59.999Z is 23:59:59.999 in Etc/GMT+4 (UTC-4)
+    // 2024-06-16T03:59:59.999Z is 23:59:59.999 in Etc/GMT+4 (UTC-4)
     vi.setSystemTime(new Date('2024-06-16T03:59:59.999Z'));
 
-    expect(Number.isInteger(getSecondsUntilMidnightInTimezone('Etc/GMT+4'))).toBe(true);
+    const result = getSecondsUntilMidnightInTimezone('Etc/GMT+4');
+    expect(Number.isInteger(result)).toBe(true);
+    expect(result).toBe(0);
   });
 
   it('handles extreme timezone Etc/GMT-14 (UTC+14)', () => {
