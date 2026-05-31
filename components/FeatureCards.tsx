@@ -419,7 +419,7 @@ export function FeatureCardsSection({ children }: { children: ReactNode }) {
       gsapRegistered = true;
     }
   }, []);
-  
+
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
