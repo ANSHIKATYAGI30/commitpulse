@@ -37,9 +37,7 @@ function getLuminance(hex: string) {
 
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
-  const parsed = ogParamsSchema.parse(
-    Object.fromEntries(searchParams.entries())
-  );
+  const parsed = ogParamsSchema.parse(Object.fromEntries(searchParams.entries()));
   let { user } = parsed;
   const { theme, bg, text, accent } = parsed;
 
