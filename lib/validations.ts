@@ -1,5 +1,5 @@
 // lib/validations.ts
-
+import { supportedLanguages } from './i18n/badgeLabels';
 import { z } from 'zod';
 import {
   isValidHex,
@@ -60,7 +60,7 @@ function dimensionParam(name: string, min: number, max: number) {
 
 const GITHUB_USERNAME_REGEX = /^[a-zA-Z0-9](?:[a-zA-Z0-9]|-(?=[a-zA-Z0-9]))*$/;
 
-export const streakParamsSchema = z.object({
+const baseStreakParamsSchema = z.object({
   // Required — missing user surfaces as "Missing" to match existing tests
   user: z
     .string({ error: 'Missing user parameter' })
@@ -169,13 +169,28 @@ export const streakParamsSchema = z.object({
       },
       { message: 'Invalid "to" date format. Use ISO 8601 (e.g. 2023-12-31).' }
     ),
+  tz: z
+    .string()
+    .optional()
+    .refine(
+      (val) => {
+        if (!val) return true;
+        try {
+          new Intl.DateTimeFormat(undefined, { timeZone: val });
+          return true;
+        } catch {
+          return false;
+        }
+      },
+      { message: 'Invalid timezone. Must be a valid IANA timezone (e.g. America/New_York).' }
+    ),
   refresh: z.string().optional().transform(toRefreshFlag),
   hide_title: z.string().optional().transform(toBooleanFlag),
   hide_background: z.string().optional().transform(toBooleanFlag),
   hide_stats: z.string().optional().transform(toBooleanFlag),
-  lang: z.string().optional().default('en'),
+  lang: z.enum(supportedLanguages).catch('en').default('en'),
   // Unknown view values fall back to the default dashboard view.
-  view: z.enum(['default', 'monthly']).catch('default').default('default'),
+  view: z.enum(['default', 'monthly', 'heatmap']).catch('default').default('default'),
   // Invalid delta formats fall back to percentage mode.
   delta_format: z.enum(['percent', 'absolute', 'both']).catch('percent').default('percent'),
   width: dimensionParam('width', 100, 1200),
@@ -183,7 +198,13 @@ export const streakParamsSchema = z.object({
   grace: z.string().optional().transform(toGraceValue).default(1),
   mode: z.enum(['commits', 'loc']).catch('commits').default('commits'),
   repo: z.string().optional(),
-  org: z.string().optional(),
+  org: z
+    .string()
+    .max(39, { message: 'Organization name cannot exceed 39 characters' })
+    .regex(GITHUB_USERNAME_REGEX, {
+      message: 'Invalid organization name format',
+    })
+    .optional(),
   labels: z.string().optional().transform(toBooleanFlag),
   labelColor: z
     .string()
@@ -215,11 +236,25 @@ export const streakParamsSchema = z.object({
       return val === 'true';
     })
     .default(false),
+  disable_particles: z
+    .string()
+    .optional()
+    .transform((val) => val === 'true' || val === '1'),
+  entrance: z.enum(['rise', 'fade', 'slide', 'none']).catch('rise').default('rise'),
 });
+
+export const streakParamsSchema = baseStreakParamsSchema.refine(
+  (data) => !data.from || !data.to || Date.parse(data.from) <= Date.parse(data.to),
+  {
+    message: '"to" date must be after or equal to "from" date',
+    path: ['to'],
+  }
+);
 
 export const githubParamsSchema = z.object({
   username: z
     .string({ error: 'Missing "username" parameter' })
+    .trim()
     .min(1, { message: 'Username is required' })
     .max(39, { message: 'GitHub username cannot exceed 39 characters' })
     .regex(GITHUB_USERNAME_REGEX, {
@@ -354,7 +389,7 @@ export const wrappedParamsSchema = z.object({
     .transform((val) => sanitizeFont(val) || undefined),
   refresh: z.string().optional().transform(toRefreshFlag),
   hide_title: z.string().optional().transform(toBooleanFlag),
-  hide_background: z.string().optional().transform(toRefreshFlag),
+  hide_background: z.string().optional().transform(toBooleanFlag), // ✅ Fixed: was toRefreshFlag
   width: dimensionParam('width', 100, 1200),
   height: dimensionParam('height', 80, 800),
 });
