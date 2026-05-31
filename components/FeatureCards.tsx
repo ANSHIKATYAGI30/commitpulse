@@ -6,13 +6,6 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
 let gsapRegistered = false;
 
-useEffect(() => {
-  if (!gsapRegistered) {
-    gsap.registerPlugin(ScrollTrigger);
-    gsapRegistered = true;
-  }
-}, []);
-
 /* ─── Types ─── */
 interface FeatureCardProps {
   icon: ReactNode;
@@ -420,6 +413,13 @@ export function FeatureCard({ icon, title, desc, accent, index, accentColor }: F
 
 /* ─── Section Wrapper (optional heading + background glow) ─── */
 export function FeatureCardsSection({ children }: { children: ReactNode }) {
+  useEffect(() => {
+    if (!gsapRegistered) {
+      gsap.registerPlugin(ScrollTrigger);
+      gsapRegistered = true;
+    }
+  }, []);
+  
   const sectionRef = useRef<HTMLDivElement>(null);
   const headingRef = useRef<HTMLHeadingElement>(null);
 
