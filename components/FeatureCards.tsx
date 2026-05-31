@@ -4,12 +4,11 @@ import { useRef, useState, useEffect, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
-useEffect(() => { 
-  if (typeof window !== 'undefined') { 
-    gsap.registerPlugin(ScrollTrigger); 
-  } }, 
-  []
-);
+useEffect(() => {
+  if (typeof window !== 'undefined') {
+    gsap.registerPlugin(ScrollTrigger);
+  }
+}, []);
 
 /* ─── Types ─── */
 interface FeatureCardProps {
@@ -119,11 +118,12 @@ function AnimatedBorder({ color, isHovered }: { color: string; isHovered: boolea
     <div
       ref={ref}
       className="absolute -inset-[1px] rounded-[1.75rem] pointer-events-none"
-      style={{ 
-        opacity: 0, 
-        background: `conic-gradient(from 0deg, transparent, ${color}, transparent, ${color}44, transparent)`, 
-        WebkitMaskComposite: 'xor', 
-        padding: '1.5px', }}
+      style={{
+        opacity: 0,
+        background: `conic-gradient(from 0deg, transparent, ${color}, transparent, ${color}44, transparent)`,
+        WebkitMaskComposite: 'xor',
+        padding: '1.5px',
+      }}
     />
   );
 }
