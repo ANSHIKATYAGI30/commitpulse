@@ -4,9 +4,12 @@ import { useRef, useState, useEffect, type ReactNode } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+let gsapRegistered = false;
+
 useEffect(() => {
-  if (typeof window !== 'undefined') {
+  if (!gsapRegistered) {
     gsap.registerPlugin(ScrollTrigger);
+    gsapRegistered = true;
   }
 }, []);
 
