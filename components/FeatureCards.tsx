@@ -42,7 +42,7 @@ function FloatingParticle({
     tl.to(ref.current, {
       opacity: 0.6,
       y: -60,
-      x: gsap.utils.random(-30, 30),
+      x: Math.random() * 60 - 30,
       duration: duration * 0.4,
       ease: 'power2.out',
     })
