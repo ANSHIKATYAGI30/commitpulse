@@ -989,18 +989,19 @@ describe('calculateStreak', () => {
       0,
       0,
       0, // Week 1: Empty week
-      1, // 1 day of commits
+      1, // Day 8: 1 isolated day of commits
       0,
       0,
       0,
       0,
       0,
       0,
-      0, // Week 2: Empty week
+      0, // Following 7 days: Empty week gap
     ]);
 
     const result = calculateStreak(calendar);
 
+    // Assertions ensuring calculations handle index transitions gracefully
     expect(result.currentStreak).toBe(0);
     expect(result.longestStreak).toBe(1);
     expect(result.totalContributions).toBe(1);
@@ -1680,6 +1681,51 @@ describe('aggregateCalendars', () => {
     expect(result.weeks[0].contributionDays[0].contributionCount).toBe(1); // 1 + 0
     expect(result.weeks[0].contributionDays[1].contributionCount).toBe(3); // 0 + 3
     expect(result.weeks[0].contributionDays[2].contributionCount).toBe(3); // 2 + 1
+  });
+
+  it('preserves dates that exist only in non-base calendars', () => {
+    const cal1 = {
+      totalContributions: 1,
+      weeks: [
+        {
+          contributionDays: [
+            {
+              date: '2024-03-01',
+              contributionCount: 1,
+            },
+          ],
+        },
+        {
+          contributionDays: [
+            {
+              date: '2024-03-08',
+              contributionCount: 0,
+            },
+          ],
+        },
+      ],
+    };
+
+    const cal2 = {
+      totalContributions: 5,
+      weeks: [
+        {
+          contributionDays: [
+            {
+              date: '2024-01-01',
+              contributionCount: 5,
+            },
+          ],
+        },
+      ],
+    };
+
+    const result = aggregateCalendars([cal1, cal2]);
+
+    const dates = result.weeks.flatMap((week) => week.contributionDays.map((day) => day.date));
+
+    expect(dates).toContain('2024-01-01');
+    expect(dates).toContain('2024-03-01');
   });
 });
 
