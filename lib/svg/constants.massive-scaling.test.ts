@@ -1,12 +1,7 @@
 // lib/svg/constants.massive-scaling.test.ts
 
 import { describe, expect, it } from 'vitest';
-import {
-  SVG_WIDTH,
-  SVG_HEIGHT,
-  CONTRIBUTION_MILESTONES,
-  STREAK_MILESTONES,
-} from './constants';
+import { SVG_WIDTH, SVG_HEIGHT, CONTRIBUTION_MILESTONES, STREAK_MILESTONES } from './constants';
 import {
   GHOST_HEIGHT_PX,
   LOG_SCALE_MULTIPLIER,

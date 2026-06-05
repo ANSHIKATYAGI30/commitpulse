@@ -1,9 +1,5 @@
 import { describe, expectTypeOf, it } from 'vitest';
-import {
-  CONTRIBUTION_MILESTONES,
-  SVG_HEIGHT,
-  SVG_WIDTH,
-} from './constants';
+import { CONTRIBUTION_MILESTONES, SVG_HEIGHT, SVG_WIDTH } from './constants';
 import {
   GHOST_HEIGHT_PX,
   LINEAR_SCALE_MULTIPLIER,

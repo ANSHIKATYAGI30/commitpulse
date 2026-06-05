@@ -1,10 +1,5 @@
 import { describe, it, expect } from 'vitest';
-import {
-  SVG_WIDTH,
-  SVG_HEIGHT,
-  CONTRIBUTION_MILESTONES,
-  STREAK_MILESTONES,
-} from './constants';
+import { SVG_WIDTH, SVG_HEIGHT, CONTRIBUTION_MILESTONES, STREAK_MILESTONES } from './constants';
 
 describe('svg constants', () => {
   it('exports positive SVG dimensions', () => {
