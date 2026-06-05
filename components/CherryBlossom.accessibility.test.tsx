@@ -37,7 +37,9 @@ describe('CherryBlossom accessibility', () => {
     await waitFor(() => {
       expect(
         container.querySelectorAll(
-          'button,input,textarea,select,a[href],[tabindex]:not([tabindex="-1"])')).toHaveLength(0);
+          'button,input,textarea,select,a[href],[tabindex]:not([tabindex="-1"])'
+        )
+      ).toHaveLength(0);
     });
   });
 
