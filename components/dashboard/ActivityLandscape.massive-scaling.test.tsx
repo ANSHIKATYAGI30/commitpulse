@@ -6,6 +6,7 @@ const generateData = (count: number): ActivityData[] =>
   Array.from({ length: count }, (_, i) => ({
     date: new Date(Date.now() - (count - i) * 86400000).toISOString().split('T')[0],
     count: Math.floor(Math.random() * 100),
+    intensity: Math.floor(Math.random() * 5) as 0 | 1 | 2 | 3 | 4,
     locAdditions: Math.floor(Math.random() * 500),
     locDeletions: Math.floor(Math.random() * 200),
   }));
@@ -27,6 +28,7 @@ describe('ActivityLandscape – Massive Data Sets and Extreme High Bounds Scalin
     const data: ActivityData[] = Array.from({ length: 365 }, (_, i) => ({
       date: new Date(Date.now() - (365 - i) * 86400000).toISOString().split('T')[0],
       count: 999999,
+      intensity: 4,
       locAdditions: 999999,
       locDeletions: 999999,
     }));
@@ -61,6 +63,7 @@ describe('ActivityLandscape – Massive Data Sets and Extreme High Bounds Scalin
     const data: ActivityData[] = Array.from({ length: 1000 }, (_, i) => ({
       date: new Date(Date.now() - (1000 - i) * 86400000).toISOString().split('T')[0],
       count: 0,
+      intensity: 0,
       locAdditions: 0,
       locDeletions: 0,
     }));
